@@ -2,7 +2,6 @@ package com.harsha.food_delivery.Service;
 
 import com.harsha.food_delivery.dto.OrderResponse;
 import com.harsha.food_delivery.exception.BadRequestException;
-import com.harsha.food_delivery.exception.ResourceNotFoundException;
 import com.harsha.food_delivery.model.*;
 import com.harsha.food_delivery.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -127,9 +125,8 @@ class OrderServiceTest {
         when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
-        BadRequestException ex = assertThrows(BadRequestException.class, () ->
-                orderService.placeOrder(testUser.getEmail())
-        );
+        BadRequestException ex = assertThrows(BadRequestException.class,
+                () -> orderService.placeOrder(testUser.getEmail()));
 
         assertEquals("Cart is empty", ex.getMessage());
         verify(orderRepository, never()).save(any());
@@ -149,9 +146,8 @@ class OrderServiceTest {
         when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
 
-        BadRequestException ex = assertThrows(BadRequestException.class, () ->
-                orderService.placeOrder(testUser.getEmail())
-        );
+        BadRequestException ex = assertThrows(BadRequestException.class,
+                () -> orderService.placeOrder(testUser.getEmail()));
 
         assertTrue(ex.getMessage().contains("currently unavailable"));
         verify(orderRepository, never()).save(any());
@@ -191,9 +187,8 @@ class OrderServiceTest {
         when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(orderRepository.findByIdAndUser(99, testUser)).thenReturn(Optional.of(order));
 
-        BadRequestException ex = assertThrows(BadRequestException.class, () ->
-                orderService.cancelOrder(99, testUser.getEmail())
-        );
+        BadRequestException ex = assertThrows(BadRequestException.class,
+                () -> orderService.cancelOrder(99, testUser.getEmail()));
 
         assertEquals("Order cannot be cancelled", ex.getMessage());
     }
